@@ -155,15 +155,6 @@ const AnimatedIntro = () => {
       <div className="relative z-10 flex flex-col items-center">
         <div className="text-5xl font-bold mb-4">Padmavathi</div>
         <JobTitleRotator />
-
-        {showContent && (
-          <motion.div
-            initial={{opacity: 0}}
-            animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
-            className="flex flex-col items-center"
-          >
-          </motion.div>
-        )}
       </div>
     </motion.div>
   );
@@ -325,15 +316,8 @@ const ExperienceSection = () => {
       title: 'AI Developer',
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
-      description: 'Deep Learning, Natural Language Processing (NLP) and +8 skills',
+      description: '',
       skills: ['Deep Learning', 'NLP', 'Python', 'TensorFlow'], // Example skills
-    },
-    {
-      title: 'AI Developer - Trainee',
-      company: 'Mani India Technologies (P) Ltd.',
-      timeframe: 'Jan 2024 - Apr 2024',
-      description: 'Vector Databases, CI/CD, Deep Learning and +15 skills',
-      skills: ['Vector Databases', 'CI/CD', 'Deep Learning', 'Kubernetes'], // Example skills
     },
     {
       title: 'Data Analyst Intern',
@@ -349,23 +333,29 @@ const ExperienceSection = () => {
       <h2 className="text-3xl font-bold mb-8">Experience</h2>
       <VerticalTimeline>
         {experiences.map((exp, index) => (
-          <VerticalTimelineElement
+          <motion.div
             key={index}
-            className="vertical-timeline-element--work"
-            date={exp.timeframe}
-            iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
-            contentStyle={{background: 'rgb(25, 25, 25)', color: '#fff'}}
-            contentArrowStyle={{borderRight: '7px solid  rgb(25, 25, 25)'}}
+            initial={{opacity: 0, x: index % 2 === 0 ? -50 : 50}}
+            animate={{opacity: 1, x: 0}}
+            transition={{duration: 0.5, delay: index * 0.2}}
           >
-            <h3 className="vertical-timeline-element-title">{exp.title}</h3>
-            <h4 className="vertical-timeline-element-subtitle">{exp.company}</h4>
-            <p>{exp.description}</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {exp.skills.map((skill, i) => (
-                <Badge key={i} className="bg-gray-700 hover:bg-accent text-white">{skill}</Badge>
-              ))}
-            </div>
-          </VerticalTimelineElement>
+            <VerticalTimelineElement
+              className="vertical-timeline-element--work"
+              date={exp.timeframe}
+              iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+              contentStyle={{background: 'rgb(25, 25, 25)', color: '#fff'}}
+              contentArrowStyle={{borderRight: '7px solid  rgb(25, 25, 25)'}}
+            >
+              <h3 className="vertical-timeline-element-title">{exp.title}</h3>
+              <h4 className="vertical-timeline-element-subtitle">{exp.company}</h4>
+              <p>{exp.description}</p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {exp.skills.map((skill, i) => (
+                  <Badge key={i} className="bg-gray-700 hover:bg-accent text-white">{skill}</Badge>
+                ))}
+              </div>
+            </VerticalTimelineElement>
+          </motion.div>
         ))}
       </VerticalTimeline>
     </section>
