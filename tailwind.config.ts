@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
   	extend: {
+      height: {
+        svh: '100svh',
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
