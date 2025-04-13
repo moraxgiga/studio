@@ -236,12 +236,13 @@ const SkillsDisplay = () => {
   const skills = [
     {name: 'Machine Learning', proficiency: 0.9},
     {name: 'Deep Learning', proficiency: 0.85},
-    {name: 'Natural Language Processing', proficiency: 0.75},
-    {name: 'Data Visualization', proficiency: 0.95},
-    {name: 'Predictive Analytics', proficiency: 0.8},
-    {name: 'Python', proficiency: 0.9},
-    {name: 'Back End Development', proficiency: 0.7},
-    {name: 'Generative AI', proficiency: 0.8},
+    {name: 'Natural Language Processing', proficiency: 0.95},
+    {name: 'Data Science', proficiency: 0.95},
+    {name: 'Data Visualization', proficiency: 0.8},
+    {name: 'Data Analytics', proficiency: 0.8},
+    {name: 'Python', proficiency: 0.98},
+    {name: 'Back End Development', proficiency: 0.90},
+    {name: 'Generative AI', proficiency: 0.96},
   ];
 
   return (
@@ -273,17 +274,17 @@ const SkillsDisplay = () => {
 const ProjectsShowcase = () => {
   const projects = [
     {
-      title: 'AI-Driven Healthcare Diagnostics',
+      title: 'AI-Driven Healthcare Chatbot',
       description:
-        'Developed an AI model for early detection of diseases using medical imaging.',
-      techStack: ['Python', 'TensorFlow', 'Medical Imaging'],
+        'Developed an AI Assistant that detect the user disease.',
+      techStack: ['Python', 'Chainlit', 'Generative AI'],
       demoLink: '#',
     },
     {
       title: 'NLP Chatbot for Customer Support',
       description:
-        'Created a chatbot using NLP to automate customer support interactions.',
-      techStack: ['Node.js', 'React', 'Dialogflow'],
+        'Developed a high-quality synthetic function-calling dataset using LLaMA 3 and 3.1, achieving 90% accuracy in generating structured function-calling formats.',
+      techStack: ['Python', 'Generative AI', 'Sytheticdata'],
       demoLink: '#',
     },
   ];
@@ -389,7 +390,7 @@ const ExperienceSection = () => {
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
       description: 'Developing AI solutions.',
-      skills: ['Deep Learning', 'NLP', 'Python', 'TensorFlow'], // Example skills
+      skills: ['Generative AI', 'LLM', 'Python', 'Backend', 'Database'], // Example skills
     },
     {
       title: 'Data Analyst Intern',
@@ -510,10 +511,10 @@ export default function Home() {
     <div className="bg-black text-white">
       <AnimatedIntro />
       <main className="container mx-auto px-4">
-        <SkillsDisplay />
         <ExperienceSection />
-        <EducationSection />
+        <SkillsDisplay />
         <ProjectsShowcase />
+        <EducationSection />
         <ContactSection />
       </main>
     </div>
