@@ -160,8 +160,9 @@ const AnimatedIntro = () => {
           <motion.div
             initial={{opacity: 0}}
             animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
+            className="flex flex-col items-center"
           >
-            <p className="mt-4">
+            <p className="mt-4 text-center">
               Hi, I'M Padmavathi
               <br />
               {/* Typing effect of roles */}
@@ -317,10 +318,10 @@ const JobTitleRotator = () => {
   });
 
   return (
-    <span className="text-2xl font-semibold">
+    <div className="text-2xl font-semibold">
       {text}
       <Cursor />
-    </span>
+    </div>
   );
 };
 
