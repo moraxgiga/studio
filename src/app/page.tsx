@@ -7,6 +7,7 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Textarea} from '@/components/ui/textarea';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {useTypewriter, Cursor} from 'react-simple-typewriter';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -152,6 +153,9 @@ const AnimatedIntro = () => {
       <div className="relative z-10 flex flex-col items-center">
         <div className="text-5xl font-bold mb-4">Padmavathi</div>
         <JobTitleRotator />
+        <div className="text-2xl font-semibold mt-2">
+          based on Trichy, Tamil Nadu
+        </div>
         {showContent && (
           <motion.div
             initial={{opacity: 0}}
@@ -299,49 +303,19 @@ const ContactSection = () => {
 
 const JobTitleRotator = () => {
   const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist'];
-  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
-  const controls = useAnimation();
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTitleIndex((prevIndex) => (prevIndex + 1) % jobTitles.length);
-    }, 2000);
-
-    return () => clearInterval(intervalId);
-  }, [jobTitles.length]);
-
-  useEffect(() => {
-    const animateTitle = async () => {
-      await controls.start({
-        opacity: 0,
-        y: 20,
-        transition: { duration: 0.5 },
-      });
-      await controls.start({
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 },
-      });
-    };
-
-    animateTitle(); // Initial animation
-
-    // Set up interval to trigger animation every 2 seconds
-    const intervalId = setInterval(() => {
-      animateTitle();
-    }, 2000);
-
-    return () => clearInterval(intervalId); // Clean up interval on component unmount
-  }, [controls]);
+  const [text] = useTypewriter({
+    words: jobTitles,
+    loop: {},
+    typeSpeed: 70,
+    deleteSpeed: 50,
+    delaySpeed: 1000,
+  });
 
   return (
-    <motion.div
-      className="text-2xl font-semibold"
-      animate={controls}
-      initial={{ opacity: 1, y: 0 }}
-    >
-      {jobTitles[currentTitleIndex]}
-    </motion.div>
+    <div className="text-2xl font-semibold">
+      {text}
+      <Cursor />
+    </div>
   );
 };
 
@@ -402,6 +376,9 @@ const EducationSection = () => {
             <CardTitle>{edu.degree}</CardTitle>
             <CardDescription>{edu.university} | {edu.timeframe}</CardDescription>
           </CardHeader>
+          <CardContent>
+            <p className="text-gray-400">{edu.description}</p>
+          </CardContent>
         </Card>
       ))}
     </section>
