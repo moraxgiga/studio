@@ -48,6 +48,7 @@ const AnimatedIntro = () => {
 
     let animationFrameId: number;
     const nodes = [];
+    const particles = [];
     const numNodes = 50;
 
     canvas.width = window.innerWidth;
@@ -90,6 +91,53 @@ const AnimatedIntro = () => {
 
         this.draw();
       }
+
+      throwParticle() {
+        particles.push(new Particle(this.x, this.y, this.color));
+      }
+    }
+
+    class Particle {
+      x: number;
+      y: number;
+      radius: number;
+      vx: number;
+      vy: number;
+      alpha: number;
+      color: string;
+
+      constructor(x: number, y: number, color: string) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.vx = (Math.random() - 0.5) * 5;
+        this.vy = (Math.random() - 0.5) * 5 - 3; // Upward motion
+        this.alpha = 1;
+        this.color = color;
+      }
+
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.05; // Gravity
+        this.alpha -= 0.02; // Fade out
+
+        if (this.alpha < 0) {
+          return false; // Mark for removal
+        }
+
+        this.draw();
+        return true;
+      }
     }
 
     function initNodes() {
@@ -122,7 +170,22 @@ const AnimatedIntro = () => {
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawConnections();
-      nodes.forEach(node => node.update());
+
+      // Update and draw nodes
+      nodes.forEach(node => {
+        node.update();
+        if (Math.random() < 0.01) {
+          node.throwParticle();
+        }
+      });
+
+      // Update and draw particles, remove faded ones
+      particles.forEach((particle, index) => {
+        if (!particle.update()) {
+          particles.splice(index, 1);
+        }
+      });
+
       animationFrameId = requestAnimationFrame(animate);
     }
 
@@ -153,7 +216,7 @@ const AnimatedIntro = () => {
     >
       <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
       <div className="relative z-10 flex flex-col items-center">
-        <div className="text-5xl font-bold mb-4">Padmavathi</div>
+        <div className="text-5xl font-bold mb-4">Gokul Raja</div>
         <JobTitleRotator />
       </div>
     </motion.div>
