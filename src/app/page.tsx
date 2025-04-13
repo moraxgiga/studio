@@ -149,15 +149,15 @@ const AnimatedIntro = () => {
       animate={controls}
     >
       <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
-      <div className="relative z-10">
-        <div className="text-5xl font-bold mb-4">SynapseAI</div>
-        <p className="text-lg">Initializing Neural Network...</p>
+      <div className="relative z-10 flex flex-col items-center">
+        <div className="text-5xl font-bold mb-4">Padmavathi</div>
+        <JobTitleRotator />
         {showContent && (
           <motion.div
             initial={{opacity: 0}}
             animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
           >
-            <p className="mt-4">Welcome to my AI-engineered portfolio, Padmavathi.</p>
+            <p className="mt-4">Welcome to my AI-engineered portfolio.</p>
           </motion.div>
         )}
       </div>
@@ -318,7 +318,6 @@ export default function Home() {
     <div className="bg-black text-white">
       <AnimatedIntro />
       <main className="container mx-auto px-4">
-        <JobTitleRotator />
         <SkillsDisplay />
         <ProjectsShowcase />
         <ContactSection />
