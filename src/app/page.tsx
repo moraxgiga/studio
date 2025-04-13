@@ -303,10 +303,10 @@ const JobTitleRotator = () => {
   });
 
   return (
-    <div className="text-2xl font-semibold">
+    <motion.div className="text-2xl font-semibold">
       {text}
       <Cursor />
-    </div>
+    </motion.div>
   );
 };
 
@@ -316,14 +316,14 @@ const ExperienceSection = () => {
       title: 'AI Developer',
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
-      description: '',
+      description: 'Developing AI solutions.',
       skills: ['Deep Learning', 'NLP', 'Python', 'TensorFlow'], // Example skills
     },
     {
       title: 'Data Analyst Intern',
       company: 'Shiash Info Solutions Private Limited',
       timeframe: 'Apr 2023 - Jun 2023',
-      description: '',
+      description: 'Analyzing Data.',
       skills: ['Data Analysis'], // Example skills
     },
   ];
@@ -352,6 +352,18 @@ const ExperienceSection = () => {
     },
   };
 
+  const descriptionVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <section className="py-12">
       <h2 className="text-3xl font-bold mb-8">Experience</h2>
@@ -372,7 +384,14 @@ const ExperienceSection = () => {
             >
               <h3 className="vertical-timeline-element-title">{element.title}</h3>
               <h4 className="vertical-timeline-element-subtitle">{element.company}</h4>
-              <p>{element.description}</p>
+              <motion.p
+                className="text-white"
+                variants={descriptionVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {element.description}
+              </motion.p>
               <div className="flex flex-wrap gap-2 mt-2">
                 {element.skills.map((skill, i) => (
                   <Badge key={i} className="bg-gray-700 hover:bg-accent text-white">{skill}</Badge>
