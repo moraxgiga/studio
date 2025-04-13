@@ -323,39 +323,63 @@ const ExperienceSection = () => {
       title: 'Data Analyst Intern',
       company: 'Shiash Info Solutions Private Limited',
       timeframe: 'Apr 2023 - Jun 2023',
-      description: 'REST APIs, Python and +1 skill',
-      skills: ['REST APIs', 'Python', 'Data Analysis'], // Example skills
+      description: '',
+      skills: ['Data Analysis'], // Example skills
     },
   ];
+
+  const timelineElements = experiences.map((exp, index) => ({
+    id: index.toString(),
+    title: exp.title,
+    company: exp.company,
+    date: exp.timeframe,
+    description: exp.description,
+    skills: exp.skills,
+    iconStyle: { background: 'rgb(33, 150, 243)', color: '#fff' },
+    contentStyle: { background: 'rgb(25, 25, 25)', color: '#fff' },
+    contentArrowStyle: { borderRight: '7px solid  rgb(25, 25, 25)' },
+  }));
+
+  const timelineItemVariants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   return (
     <section className="py-12">
       <h2 className="text-3xl font-bold mb-8">Experience</h2>
       <VerticalTimeline>
-        {experiences.map((exp, index) => (
-          <motion.div
-            key={index}
-            initial={{opacity: 0, x: index % 2 === 0 ? -50 : 50}}
-            animate={{opacity: 1, x: 0}}
-            transition={{duration: 0.5, delay: index * 0.2}}
+        {timelineElements.map((element, index) => (
+          <VerticalTimelineElement
+            key={element.id}
+            className="vertical-timeline-element--work"
+            date={element.date}
+            iconStyle={element.iconStyle}
+            contentStyle={element.contentStyle}
+            contentArrowStyle={element.contentArrowStyle}
           >
-            <VerticalTimelineElement
-              className="vertical-timeline-element--work"
-              date={exp.timeframe}
-              iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
-              contentStyle={{background: 'rgb(25, 25, 25)', color: '#fff'}}
-              contentArrowStyle={{borderRight: '7px solid  rgb(25, 25, 25)'}}
+            <motion.div
+              variants={timelineItemVariants}
+              initial="hidden"
+              animate="visible"
             >
-              <h3 className="vertical-timeline-element-title">{exp.title}</h3>
-              <h4 className="vertical-timeline-element-subtitle">{exp.company}</h4>
-              <p>{exp.description}</p>
+              <h3 className="vertical-timeline-element-title">{element.title}</h3>
+              <h4 className="vertical-timeline-element-subtitle">{element.company}</h4>
+              <p>{element.description}</p>
               <div className="flex flex-wrap gap-2 mt-2">
-                {exp.skills.map((skill, i) => (
+                {element.skills.map((skill, i) => (
                   <Badge key={i} className="bg-gray-700 hover:bg-accent text-white">{skill}</Badge>
                 ))}
               </div>
-            </VerticalTimelineElement>
-          </motion.div>
+            </motion.div>
+          </VerticalTimelineElement>
         ))}
       </VerticalTimeline>
     </section>
