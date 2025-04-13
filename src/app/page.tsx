@@ -157,7 +157,7 @@ const AnimatedIntro = () => {
             initial={{opacity: 0}}
             animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
           >
-            <p className="mt-4">Welcome to my AI-engineered portfolio, Gokul Raja.</p>
+            <p className="mt-4">Welcome to my AI-engineered portfolio, Padmavathi.</p>
           </motion.div>
         )}
       </div>
@@ -294,11 +294,31 @@ const ContactSection = () => {
   );
 };
 
+const JobTitleRotator = () => {
+  const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist'];
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTitleIndex((prevIndex) => (prevIndex + 1) % jobTitles.length);
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, [jobTitles.length]);
+
+  return (
+    <div className="text-2xl font-semibold">
+      {jobTitles[currentTitleIndex]}
+    </div>
+  );
+};
+
 export default function Home() {
   return (
     <div className="bg-black text-white">
       <AnimatedIntro />
       <main className="container mx-auto px-4">
+        <JobTitleRotator />
         <SkillsDisplay />
         <ProjectsShowcase />
         <ContactSection />
