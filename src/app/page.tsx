@@ -225,7 +225,7 @@ const AnimatedIntro = () => {
     >
       <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
       <div className="relative z-10 flex flex-col items-center">
-        <div className="text-5xl font-bold mb-4">Gokul Raja</div>
+        <div className="text-5xl font-bold mb-4">Padmavathi</div>
         <JobTitleRotator />
       </div>
     </motion.div>
@@ -519,3 +519,4 @@ export default function Home() {
     </div>
   );
 }
+
