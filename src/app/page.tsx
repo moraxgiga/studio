@@ -4,11 +4,11 @@ import {useEffect, useRef, useState} from 'react';
 import {motion, useAnimation} from 'framer-motion';
 import {Badge} from '@/components/ui/badge';
 import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {Textarea} from '@/components/ui/textarea';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {useTypewriter, Cursor} from 'react-simple-typewriter';
 import Image from 'next/image';
+import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -160,7 +160,12 @@ const AnimatedIntro = () => {
             initial={{opacity: 0}}
             animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
           >
-            <p className="mt-4">Hi, I'm Padmavathi. Welcome to my AI-engineered portfolio.</p>
+            <p className="mt-4">
+              Hi, I'M Padmavathi
+              <br />
+              {/* Typing effect of roles */}
+              <JobTitleRotator />
+            </p>
           </motion.div>
         )}
       </div>
@@ -325,35 +330,48 @@ const ExperienceSection = () => {
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
       description: 'Deep Learning, Natural Language Processing (NLP) and +8 skills',
+      skills: ['Deep Learning', 'NLP', 'Python', 'TensorFlow'], // Example skills
     },
     {
       title: 'AI Developer - Trainee',
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Jan 2024 - Apr 2024',
       description: 'Vector Databases, CI/CD, Deep Learning and +15 skills',
+      skills: ['Vector Databases', 'CI/CD', 'Deep Learning', 'Kubernetes'], // Example skills
     },
     {
       title: 'Data Analyst Intern',
       company: 'Shiash Info Solutions Private Limited',
       timeframe: 'Apr 2023 - Jun 2023',
       description: 'REST APIs, Python and +1 skill',
+      skills: ['REST APIs', 'Python', 'Data Analysis'], // Example skills
     },
   ];
 
   return (
     <section className="py-12">
       <h2 className="text-3xl font-bold mb-8">Experience</h2>
-      {experiences.map((exp, index) => (
-        <Card key={index} className="mb-4 bg-gray-800 text-white">
-          <CardHeader>
-            <CardTitle>{exp.title}</CardTitle>
-            <CardDescription>{exp.company} | {exp.timeframe}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-400">{exp.description}</p>
-          </CardContent>
-        </Card>
-      ))}
+      <VerticalTimeline>
+        {experiences.map((exp, index) => (
+          <VerticalTimelineElement
+            key={index}
+            className="vertical-timeline-element--work"
+            date={exp.timeframe}
+            iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+            contentStyle={{background: 'rgb(25, 25, 25)', color: '#fff'}}
+            contentArrowStyle={{borderRight: '7px solid  rgb(25, 25, 25)'}}
+          >
+            <h3 className="vertical-timeline-element-title">{exp.title}</h3>
+            <h4 className="vertical-timeline-element-subtitle">{exp.company}</h4>
+            <p>{exp.description}</p>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {exp.skills.map((skill, i) => (
+                <Badge key={i} className="bg-gray-700 hover:bg-accent text-white">{skill}</Badge>
+              ))}
+            </div>
+          </VerticalTimelineElement>
+        ))}
+      </VerticalTimeline>
     </section>
   );
 };
