@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, Fragment } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import {Badge} from '@/components/ui/badge';
 import {Button} from '@/components/ui/button';
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {cn} from '@/lib/utils';
 import {useTypewriter, Cursor} from 'react-simple-typewriter';
@@ -11,7 +13,7 @@ import Image from 'next/image';
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import {Textarea} from '@/components/ui/textarea';
-import {Linkedin, Mail, Mobile, Github} from '@/components/icons';
+import {Linkedin, Mail, Mobile, Github, Copy, ThumbsUp, ThumbsDown, Edit, ChevronsUpDown} from '@/components/icons';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -237,10 +239,10 @@ const SkillsDisplay = () => {
     {name: 'Natural Language Processing', proficiency: 0.95},
     {name: 'Data Science', proficiency: 0.95},
     {name: 'Data Visualization', proficiency: 0.8},
-    {name: 'Data Analytics', proficiency: 0.8},
     {name: 'Python', proficiency: 0.98},
-    {name: 'Back End Development', proficiency: 0.90},
+    {name: 'BackEnd Development', proficiency: 0.90},
     {name: 'Generative AI', proficiency: 0.96},
+    {name: 'Data Analytics', proficiency: 0.8},
   ];
 
   return (
@@ -262,9 +264,16 @@ const SkillsDisplay = () => {
               />
             </div>
             <p className="text-sm mt-2">Proficiency: {skill.proficiency * 100}%</p>
-          </motion.div>
+          </motion.div>          
         ))}
       </div>
+      <div className="mt-8 flex justify-center">
+          <Button variant="outline" size="lg" >
+            <a href="https://github.com/Padmavathi041101" download>
+            Download CV
+            </a>
+          </Button>
+        </div>
     </section>
   );
 };
@@ -318,16 +327,28 @@ const ProjectsShowcase = () => {
   );
 };
 
-const AboutMeSection = () => {  
-  const sentences = [
-    "As an AI Engineer, I specialize in crafting innovative solutions that leverage the power of machine learning, deep learning, and natural language processing.",
-    "My expertise spans across developing AI-driven applications, building advanced language models, and implementing data-driven strategies to enhance business outcomes.",
-    "With a strong foundation in Python, coupled with hands-on experience in generative AI and backend development, I am passionate about pushing the boundaries of what's possible in the AI landscape.",
+
+const AboutMeSection = () => {
+  const initialSentences = [
+    "I am a developer with a strong passion for Data Science and AI, committed to solving real-world problems and delivering valuable end-user experiences. With over 1+ years of experience, I've worked across the AI development lifecycle, from model creation and deployment to building AI applications and backend systems. I strive to create intuitive and effective solutions, balancing user needs, business goals, and technical feasibility.",
     "I am dedicated to continuous learning and exploring new methodologies to create intelligent, efficient, and scalable systems.",
-    "I am open for new opportunites.",
+    "I am open for new opportunities😄.",
   ];
-  const [displayedSentences, setDisplayedSentences] = useState<string[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
+  
+  const models = [
+    "Auto",
+    "GPT-4o",
+    "o3-mini",
+    "GPT-4o mini",
+  ];
+
+  const [sentences, setSentences] = useState<string[]>(initialSentences);
+  const [displayedSentences, setDisplayedSentences] = useState<string[]>([]); // Track generated text
+  const [isGenerating, setIsGenerating] = useState(false); // Track generation status
+  const [isCopied, setIsCopied] = useState(false); // Add state for copy status
+
+
+  const [selectedModel, setSelectedModel] = useState("Auto");
   const sectionRef = useRef<HTMLElement>(null);
   const tokens = sentences.map((s) => s.split(/\s+/));
 
@@ -366,6 +387,19 @@ const AboutMeSection = () => {
     } 
   }, [isGenerating, sentences, displayedSentences]);
 
+
+  const handleRetry = () => {
+        setDisplayedSentences([]); // Reset generated text
+        setIsGenerating(false);
+        generateTokens(); // Start generating again
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(displayedSentences.join(" ")).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 3000);
+    });
+  };
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -390,45 +424,65 @@ const AboutMeSection = () => {
     };
   }, [generateTokens]);
 
+
   return (
     <section ref={sectionRef} className="py-12">
       <h2 className="text-3xl font-bold mb-8">About Me</h2>
       <div className="rounded-lg p-6">
-      {displayedSentences.length > 0 && (
-        <p className="text-gray-400">
-         {displayedSentences.map((sentence, index) => {
-            const token = sentence.split(' ');
-            if (token.length > 0 && token[token.length - 1].includes('tokens/sec')) {
-              return (
-                 <span key={index}>
-                  {token.slice(0, -2).join(' ')} <span className="text-accent-foreground">{token.slice(-2).join(' ')}</span>
-                   {index < displayedSentences.length - 1 ? (
-                   <>  
-                     <br />
-                     <br />
-                   </>
-                 ) : null}
-                </span>
-              )
-            }
-            return (
-              <span key={index}>
-
-                {sentence}{index < displayedSentences.length - 1 ? (<><br /><br /></>) : null}
-              </span>
-            );
-          })}
-        </p>
-      )}
-      </div>
-    </section>
-  );
-};
+        {displayedSentences.length > 0 && (
+          <Fragment>
+            <p className="text-gray-400">
+              {displayedSentences.map((sentence, index) => {
+                const token = sentence.split(' ');
+                if (token.length > 0 && token[token.length - 1].includes('tokens/sec')) {
+                  return (
+                    <span key={index}>
+                      {token.slice(0, -2).join(' ')} <span className="text-accent-foreground">{token.slice(-2).join(' ')}</span>
+                      {index < displayedSentences.length - 1 ? (
+                        <>
+                          <br />
+                          <br />
+                        </>
+                      ) : null}
+                    </span>
+                  );
+                }
+                return (
+                  <span key={index}>
+                    {sentence}
+                    {index < displayedSentences.length - 1 ? (
+                      <>
+                        <br />
+                        <br />
+                      </>
+                    ) : null}
+                  </span>
+                );
+              })}
+            </p>
+            <div className="flex justify-start gap-4 mt-4">
+            <Button onClick={handleCopy} variant="outline" size="icon">
+                  <Copy className="w-4 h-4" />
+                  {isCopied && <span className="ml-2 text-xs">Copied!</span>}
+                </Button>
+                <Button  variant="outline" size="icon">
+                  <ThumbsUp className="w-4 h-4" />
+                </Button>
+                <Button  variant="outline" size="icon">
+                  <ThumbsDown className="w-4 h-4" />
+                </Button>
+            </div>
+            </Fragment>
+          )}
+        </div>
+      </section>
+    );
+  };
 
 
 
 const ContactInformation = () => {
-  return (
+              return (
     <section className="py-12">
       <h2 className="text-3xl font-bold mb-8">Contact Information</h2>
       <div className="space-y-4">
@@ -472,7 +526,7 @@ const ContactInformation = () => {
 };
 
 const JobTitleRotator = () => {
-  const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist', 'Python developer'];
+  const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist', 'Python Developer'];
   const [text] = useTypewriter({
     words: jobTitles,
     loop: {},
@@ -620,7 +674,7 @@ export default function Home() {
         <AboutMeSection />
         <ExperienceSection />
         <SkillsDisplay />
-       <ProjectsShowcase />
+        <ProjectsShowcase />
         <EducationSection />
         <ContactInformation />
       </main>
