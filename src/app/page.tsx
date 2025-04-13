@@ -153,9 +153,7 @@ const AnimatedIntro = () => {
       <div className="relative z-10 flex flex-col items-center">
         <div className="text-5xl font-bold mb-4">Padmavathi</div>
         <JobTitleRotator />
-        <div className="text-2xl font-semibold mt-2">
-          based on Trichy, Tamil Nadu
-        </div>
+        
         {showContent && (
           <motion.div
             initial={{opacity: 0}}
@@ -302,13 +300,13 @@ const ContactSection = () => {
 };
 
 const JobTitleRotator = () => {
-  const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist'];
+  const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist', 'Python developer'];
   const [text] = useTypewriter({
     words: jobTitles,
     loop: {},
     typeSpeed: 70,
     deleteSpeed: 50,
-    delaySpeed: 1000,
+    delaySpeed: 2000,
   });
 
   return (
@@ -400,3 +398,4 @@ export default function Home() {
     </div>
   );
 }
+
