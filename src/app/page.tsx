@@ -317,10 +317,10 @@ const JobTitleRotator = () => {
   });
 
   return (
-    <div className="text-2xl font-semibold">
+    <span className="text-2xl font-semibold">
       {text}
       <Cursor />
-    </div>
+    </span>
   );
 };
 
