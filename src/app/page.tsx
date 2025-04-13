@@ -12,6 +12,7 @@ const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
   const controls = useAnimation();
   const introRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     const animateIntro = async () => {
@@ -35,23 +36,131 @@ const AnimatedIntro = () => {
     };
   }, [controls]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    const nodes = [];
+    const numNodes = 50;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Node {
+      x: number;
+      y: number;
+      radius: number;
+      vx: number;
+      vy: number;
+      color: string;
+
+      constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.radius = 3 + Math.random() * 3;
+        this.vx = (Math.random() - 0.5) * 2;
+        this.vy = (Math.random() - 0.5) * 2;
+        this.color = 'rgba(255, 255, 255, 0.7)';
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+          this.vx = -this.vx;
+        }
+        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+          this.vy = -this.vy;
+        }
+
+        this.draw();
+      }
+    }
+
+    function initNodes() {
+      for (let i = 0; i < numNodes; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        nodes.push(new Node(x, y));
+      }
+    }
+
+    function drawConnections() {
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = 'rgba(255, 255, 255, ' + (1 - distance / 150) + ')';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawConnections();
+      nodes.forEach(node => node.update());
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    initNodes();
+    animate();
+
+    function handleResize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      nodes.length = 0;
+      initNodes();
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
     <motion.div
       ref={introRef}
-      className="flex flex-col items-center justify-center h-screen bg-black text-white"
+      className="relative flex flex-col items-center justify-center h-screen bg-black text-white overflow-hidden"
       initial={{opacity: 0, y: 50}}
       animate={controls}
     >
-      <div className="text-5xl font-bold mb-4">SynapseAI</div>
-      <p className="text-lg">Initializing Neural Network...</p>
-      {showContent && (
-        <motion.div
-          initial={{opacity: 0}}
-          animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
-        >
-          <p className="mt-4">Welcome to my AI-engineered portfolio.</p>
-        </motion.div>
-      )}
+      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
+      <div className="relative z-10">
+        <div className="text-5xl font-bold mb-4">SynapseAI</div>
+        <p className="text-lg">Initializing Neural Network...</p>
+        {showContent && (
+          <motion.div
+            initial={{opacity: 0}}
+            animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
+          >
+            <p className="mt-4">Welcome to my AI-engineered portfolio, Gokul Raja.</p>
+          </motion.div>
+        )}
+      </div>
     </motion.div>
   );
 };
