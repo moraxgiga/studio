@@ -60,7 +60,7 @@ const AnimatedIntro = () => {
       radius: number;
       vx: number;
       vy: number;
-      color: string;
+      value: number;
 
       constructor(x: number, y: number) {
         this.x = x;
@@ -68,14 +68,19 @@ const AnimatedIntro = () => {
         this.radius = 3 + Math.random() * 3;
         this.vx = (Math.random() - 0.5) * 2;
         this.vy = (Math.random() - 0.5) * 2;
-        this.color = 'rgba(255, 255, 255, 0.7)';
+        this.value = (Math.random() * 2) - 1; // Value between -1 and 1
       }
 
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.value.toFixed(2), this.x, this.y); // Display value
       }
 
       update() {
@@ -93,7 +98,8 @@ const AnimatedIntro = () => {
       }
 
       throwParticle() {
-        particles.push(new Particle(this.x, this.y, this.color));
+        const value = (Math.random() * 2) - 1;
+        particles.push(new Particle(this.x, this.y, `rgba(255, 255, 255, 0.7)`, value));
       }
     }
 
@@ -105,31 +111,34 @@ const AnimatedIntro = () => {
       vy: number;
       alpha: number;
       color: string;
+      value: number;
 
-      constructor(x: number, y: number, color: string) {
+      constructor(x: number, y: number, color: string, value: number) {
         this.x = x;
         this.y = y;
         this.radius = 2;
-        this.vx = (Math.random() - 0.5) * 5;
-        this.vy = (Math.random() - 0.5) * 5 - 3; // Upward motion
+        this.vx = (Math.random() - 0.5) * 2;
+        this.vy = (Math.random() - 0.5) * 2 - 1; // Upward motion
         this.alpha = 1;
         this.color = color;
+        this.value = value;
       }
 
       draw() {
         ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.value.toFixed(2), this.x, this.y);
         ctx.globalAlpha = 1;
       }
 
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        this.vy += 0.05; // Gravity
-        this.alpha -= 0.02; // Fade out
+        this.vy += 0.02; // Gravity
+        this.alpha -= 0.01; // Fade out
 
         if (this.alpha < 0) {
           return false; // Mark for removal
@@ -471,14 +480,9 @@ const ExperienceSection = () => {
 const EducationSection = () => {
   const educations = [
     {
-      degree: 'Master of Science in Artificial Intelligence',
-      university: 'Stanford University',
-      timeframe: '2018 - 2020',
-    },
-    {
-      degree: 'Bachelor of Science in Computer Science',
-      university: 'University of California, Berkeley',
-      timeframe: '2014 - 2018',
+      degree: 'Master of Science in Data science',
+      university: 'St.Joseph\'s college (Autonomous) Tiruchirapalli',
+      timeframe: '2022 - 2024',
     },
   ];
 
