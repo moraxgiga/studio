@@ -75,12 +75,8 @@ const AnimatedIntro = () => {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.fill();
-        ctx.fillStyle = 'white';
-        ctx.font = '10px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(this.value.toFixed(2), this.x, this.y); // Display value
+        ctx.fill();        
+
       }
 
       update() {
