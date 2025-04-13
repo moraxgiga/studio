@@ -9,6 +9,7 @@ import {useTypewriter, Cursor} from 'react-simple-typewriter';
 import Image from 'next/image';
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
+import {Textarea} from '@/components/ui/textarea';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
