@@ -8,6 +8,7 @@ import {Input} from '@/components/ui/input';
 import {Textarea} from '@/components/ui/textarea';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {useTypewriter, Cursor} from 'react-simple-typewriter';
+import Image from 'next/image';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -153,13 +154,13 @@ const AnimatedIntro = () => {
       <div className="relative z-10 flex flex-col items-center">
         <div className="text-5xl font-bold mb-4">Padmavathi</div>
         <JobTitleRotator />
-        
+
         {showContent && (
           <motion.div
             initial={{opacity: 0}}
             animate={{opacity: 1, transition: {duration: 1, delay: 1}}}
           >
-            <p className="mt-4">Welcome to my AI-engineered portfolio.</p>
+            <p className="mt-4">Hi, I'm Padmavathi. Welcome to my AI-engineered portfolio.</p>
           </motion.div>
         )}
       </div>
@@ -320,16 +321,22 @@ const JobTitleRotator = () => {
 const ExperienceSection = () => {
   const experiences = [
     {
-      title: 'AI Engineer',
-      company: 'Tech Innovations Inc.',
-      timeframe: '2022 - Present',
-      description: 'Developed and deployed AI solutions for various client projects, focusing on machine learning and deep learning techniques.',
+      title: 'AI Developer',
+      company: 'Mani India Technologies (P) Ltd.',
+      timeframe: 'Apr 2024 - Present',
+      description: 'Deep Learning, Natural Language Processing (NLP) and +8 skills',
     },
     {
-      title: 'Data Scientist',
-      company: 'Data Insights Corp.',
-      timeframe: '2020 - 2022',
-      description: 'Conducted data analysis and built predictive models to improve business outcomes and provide data-driven insights.',
+      title: 'AI Developer - Trainee',
+      company: 'Mani India Technologies (P) Ltd.',
+      timeframe: 'Jan 2024 - Apr 2024',
+      description: 'Vector Databases, CI/CD, Deep Learning and +15 skills',
+    },
+    {
+      title: 'Data Analyst Intern',
+      company: 'Shiash Info Solutions Private Limited',
+      timeframe: 'Apr 2023 - Jun 2023',
+      description: 'REST APIs, Python and +1 skill',
     },
   ];
 
@@ -398,4 +405,3 @@ export default function Home() {
     </div>
   );
 }
-
