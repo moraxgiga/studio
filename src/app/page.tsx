@@ -13,7 +13,7 @@ import Image from 'next/image';
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import {Textarea} from '@/components/ui/textarea';
-import {Linkedin, Mail, Mobile, Github, Copy, ThumbsUp, ThumbsDown, Edit, ChevronsUpDown} from '@/components/icons';
+import {Linkedin, Mail, Mobile, Github, Copy, ThumbsUp, ThumbsDown, Edit, ChevronsUpDown,Reload} from '@/components/icons';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -471,6 +471,9 @@ const AboutMeSection = () => {
                 <Button  variant="outline" size="icon">
                   <ThumbsDown className="w-4 h-4" />
                 </Button>
+                <Button onClick={handleRetry}  variant="outline" size="icon">
+                  <Reload className="w-4 h-4" />
+                </Button>
             </div>
             </Fragment>
           )}
@@ -549,7 +552,7 @@ const ExperienceSection = () => {
       title: 'AI Developer',      
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
-      description: 'Developing AI solutions.',
+      description: 'Specialized in cutting-edge AI model development, LLM applications and data science.',
       skills: ['Generative AI', 'LLM', 'Python', 'Backend', 'Database'], // Example skills
     },
     {
