@@ -172,6 +172,9 @@ const SkillsDisplay = () => {
     {name: 'Natural Language Processing', proficiency: 0.75},
     {name: 'Data Visualization', proficiency: 0.95},
     {name: 'Predictive Analytics', proficiency: 0.8},
+    {name: 'Python', proficiency: 0.9},
+    {name: 'Back End Development', proficiency: 0.7},
+    {name: 'Generative AI', proficiency: 0.8},
   ];
 
   return (
@@ -297,6 +300,7 @@ const ContactSection = () => {
 const JobTitleRotator = () => {
   const jobTitles = ['AI Developer', 'AI Engineer', 'Data Scientist'];
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const controls = useAnimation();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -306,12 +310,104 @@ const JobTitleRotator = () => {
     return () => clearInterval(intervalId);
   }, [jobTitles.length]);
 
+  useEffect(() => {
+    const animateTitle = async () => {
+      await controls.start({
+        opacity: 0,
+        y: 20,
+        transition: { duration: 0.5 },
+      });
+      await controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5 },
+      });
+    };
+
+    animateTitle(); // Initial animation
+
+    // Set up interval to trigger animation every 2 seconds
+    const intervalId = setInterval(() => {
+      animateTitle();
+    }, 2000);
+
+    return () => clearInterval(intervalId); // Clean up interval on component unmount
+  }, [controls]);
+
   return (
-    <div className="text-2xl font-semibold">
+    <motion.div
+      className="text-2xl font-semibold"
+      animate={controls}
+      initial={{ opacity: 1, y: 0 }}
+    >
       {jobTitles[currentTitleIndex]}
-    </div>
+    </motion.div>
   );
 };
+
+const ExperienceSection = () => {
+  const experiences = [
+    {
+      title: 'AI Engineer',
+      company: 'Tech Innovations Inc.',
+      timeframe: '2022 - Present',
+      description: 'Developed and deployed AI solutions for various client projects, focusing on machine learning and deep learning techniques.',
+    },
+    {
+      title: 'Data Scientist',
+      company: 'Data Insights Corp.',
+      timeframe: '2020 - 2022',
+      description: 'Conducted data analysis and built predictive models to improve business outcomes and provide data-driven insights.',
+    },
+  ];
+
+  return (
+    <section className="py-12">
+      <h2 className="text-3xl font-bold mb-8">Experience</h2>
+      {experiences.map((exp, index) => (
+        <Card key={index} className="mb-4 bg-gray-800 text-white">
+          <CardHeader>
+            <CardTitle>{exp.title}</CardTitle>
+            <CardDescription>{exp.company} | {exp.timeframe}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-400">{exp.description}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </section>
+  );
+};
+
+const EducationSection = () => {
+  const educations = [
+    {
+      degree: 'Master of Science in Artificial Intelligence',
+      university: 'Stanford University',
+      timeframe: '2018 - 2020',
+    },
+    {
+      degree: 'Bachelor of Science in Computer Science',
+      university: 'University of California, Berkeley',
+      timeframe: '2014 - 2018',
+    },
+  ];
+
+  return (
+    <section className="py-12">
+      <h2 className="text-3xl font-bold mb-8">Education</h2>
+      {educations.map((edu, index) => (
+        <Card key={index} className="mb-4 bg-gray-800 text-white">
+          <CardHeader>
+            <CardTitle>{edu.degree}</CardTitle>
+            <CardDescription>{edu.university} | {edu.timeframe}</CardDescription>
+          </CardHeader>
+        </Card>
+      ))}
+    </section>
+  );
+};
+
 
 export default function Home() {
   return (
@@ -319,6 +415,8 @@ export default function Home() {
       <AnimatedIntro />
       <main className="container mx-auto px-4">
         <SkillsDisplay />
+        <ExperienceSection />
+        <EducationSection />
         <ProjectsShowcase />
         <ContactSection />
       </main>
