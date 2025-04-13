@@ -1,15 +1,17 @@
 'use client';
 
-import {useEffect, useRef, useState} from 'react';
-import {motion, useAnimation} from 'framer-motion';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import {Badge} from '@/components/ui/badge';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {cn} from '@/lib/utils';
 import {useTypewriter, Cursor} from 'react-simple-typewriter';
 import Image from 'next/image';
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import {Textarea} from '@/components/ui/textarea';
+import {Linkedin, Mail, Mobile, Github} from '@/components/icons';
 
 const AnimatedIntro = () => {
   const [showContent, setShowContent] = useState(false);
@@ -316,47 +318,155 @@ const ProjectsShowcase = () => {
   );
 };
 
-const ContactSection = () => {
-  const [message, setMessage] = useState('');
-  const [response, setResponse] = useState('');
+const AboutMeSection = () => {  
+  const sentences = [
+    "As an AI Engineer, I specialize in crafting innovative solutions that leverage the power of machine learning, deep learning, and natural language processing.",
+    "My expertise spans across developing AI-driven applications, building advanced language models, and implementing data-driven strategies to enhance business outcomes.",
+    "With a strong foundation in Python, coupled with hands-on experience in generative AI and backend development, I am passionate about pushing the boundaries of what's possible in the AI landscape.",
+    "I am dedicated to continuous learning and exploring new methodologies to create intelligent, efficient, and scalable systems.",
+    "I am open for new opportunites.",
+  ];
+  const [displayedSentences, setDisplayedSentences] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const tokens = sentences.map((s) => s.split(/\s+/));
 
-  const handleInputChange = (e: any) => {
-    setMessage(e.target.value);
-  };
+  const generateTokens = useCallback(() => {
+    if (!isGenerating && displayedSentences.length < sentences.length) {
+      setIsGenerating(true);
+      let currentSentenceIndex = displayedSentences.length;
+      let currentTokens = tokens[currentSentenceIndex];
+      let currentTokenIndex = -1;
+      const interval = setInterval(() => {
+        if (currentTokenIndex < currentTokens.length - 1) {
+          currentTokenIndex++;
+          const displayedText = currentTokens.slice(0, currentTokenIndex + 1).join(" ");
+           setDisplayedSentences(prev => {
+            const newSentences = [...prev];
+            if (currentSentenceIndex < newSentences.length){
+               newSentences[currentSentenceIndex] = displayedText;
+            }
+            else {
+               newSentences.push(displayedText);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    // Simulate a response from a chatbot
-    setResponse(`AI: Thank you for your message: "${message}". I will get back to you soon.`);
-  };
+            }
+            return newSentences;
+          });
+        } else {
+          clearInterval(interval);
+          const tokensPerSecond = Math.floor(Math.random() * 151) + 50;
+           setDisplayedSentences((prev) => {
+               const newSentences = [...prev];
+               newSentences[currentSentenceIndex] = `${newSentences[currentSentenceIndex]} ${tokensPerSecond} tokens/sec`;
+               return newSentences;
+          })
+          setIsGenerating(false);
+        }
+      }, 70); // Adjust interval for speed
+    } 
+  }, [isGenerating, sentences, displayedSentences]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          generateTokens();
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [generateTokens]);
 
   return (
+    <section ref={sectionRef} className="py-12">
+      <h2 className="text-3xl font-bold mb-8">About Me</h2>
+      <div className="rounded-lg p-6">
+      {displayedSentences.length > 0 && (
+        <p className="text-gray-400">
+         {displayedSentences.map((sentence, index) => {
+            const token = sentence.split(' ');
+            if (token.length > 0 && token[token.length - 1].includes('tokens/sec')) {
+              return (
+                 <span key={index}>
+                  {token.slice(0, -2).join(' ')} <span className="text-accent-foreground">{token.slice(-2).join(' ')}</span>
+                   {index < displayedSentences.length - 1 ? (
+                   <>  
+                     <br />
+                     <br />
+                   </>
+                 ) : null}
+                </span>
+              )
+            }
+            return (
+              <span key={index}>
+
+                {sentence}{index < displayedSentences.length - 1 ? (<><br /><br /></>) : null}
+              </span>
+            );
+          })}
+        </p>
+      )}
+      </div>
+    </section>
+  );
+};
+
+
+
+const ContactInformation = () => {
+  return (
     <section className="py-12">
-      <h2 className="text-3xl font-bold mb-8">Contact</h2>
-      <Card className="bg-gray-800 text-white">
-        <CardHeader>
-          <CardTitle>Chatbot Interface</CardTitle>
-          <CardDescription>Type your message below to interact.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Textarea
-              placeholder="Enter your message here..."
-              value={message}
-              onChange={handleInputChange}
-              className="bg-gray-700 text-white border-gray-600"
-            />
-            <Button type="submit" className="bg-accent hover:bg-accent-foreground">
-              Send
-            </Button>
-          </form>
-          {response && (
-            <div className="mt-4 p-4 bg-gray-900 rounded-md">
-              {response}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <h2 className="text-3xl font-bold mb-8">Contact Information</h2>
+      <div className="space-y-4">
+        {/* Email */}
+        <div className="flex items-center space-x-2">
+          <Mail className="w-6 h-6" />
+          <a
+            href="mailto:gs.padmasv01@gmail.com"
+            className="text-blue-500 hover:underline"
+          >
+            gs.padmasv01@gmail.com
+          </a>
+        </div>
+        {/* Mobile */}
+        <div className="flex items-center space-x-2">
+          <Mobile className="w-6 h-6" />
+          <a
+            href="tel:+919361240086"
+            className="text-blue-500 hover:underline"
+          >
+            +91 9361240086
+          </a>
+        </div>
+        {/* LinkedIn */}
+        <div className="flex items-center space-x-2">
+          <Linkedin className="w-6 h-6" />
+          <a href="https://www.linkedin.com/in/padmavathi-s-b7402b221/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+          LinkedIn
+          </a>
+        </div>
+        {/* GitHub */}
+        <div className="flex items-center space-x-2">
+          <Github className="w-6 h-6" />
+          <a href="https://github.com/Padmavathi041101" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+            GitHub
+          </a>
+        </div>
+      </div>
     </section>
   );
 };
@@ -382,7 +492,7 @@ const JobTitleRotator = () => {
 const ExperienceSection = () => {
   const experiences = [
     {
-      title: 'AI Developer',
+      title: 'AI Developer',      
       company: 'Mani India Technologies (P) Ltd.',
       timeframe: 'Apr 2024 - Present',
       description: 'Developing AI solutions.',
@@ -507,11 +617,12 @@ export default function Home() {
     <div className="bg-black text-white">
       <AnimatedIntro />
       <main className="container mx-auto px-4">
+        <AboutMeSection />
         <ExperienceSection />
         <SkillsDisplay />
-        <ProjectsShowcase />
+       <ProjectsShowcase />
         <EducationSection />
-        <ContactSection />
+        <ContactInformation />
       </main>
     </div>
   );
